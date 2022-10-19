@@ -20,7 +20,7 @@ interface Column
      * @example col('TABLE_COLUMN as NAME')
      * @example col(['concat(%i, %s, TABLE_COLUMN) as NAME', [10, 50]])
      *
-     * @param string $columns
+     * @param string $column
      * @param array $bindValues
      * @return Select|Update|Insert
      */

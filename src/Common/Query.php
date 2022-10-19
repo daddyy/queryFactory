@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace QueryFactory\Common;
 
-use \QueryFactory\Common\Interfaces\Query as InterfacesQuery;
 use Exception;
-use QueryFactory\Common\Interfaces\Select as InterfacesSelect;
+use QueryFactory\Common\Interfaces\Query as InterfacesQuery;
+use QueryFactory\Common\Interfaces\Delete;
+use QueryFactory\Common\Interfaces\Insert;
+use QueryFactory\Common\Interfaces\Select;
+use QueryFactory\Common\Interfaces\Update;
 use QueryFactory\QueryQuoter;
 
-abstract class Query implements InterfacesQuery, InterfacesSelect
+abstract class Query implements InterfacesQuery, Select, Delete, Update, Insert
 {
     protected string $statement;
     protected string $table = '';
@@ -30,7 +33,7 @@ abstract class Query implements InterfacesQuery, InterfacesSelect
         return  $this->queryQuoter;
     }
 
-    private function resetByPropertyName(string $propertyName): self
+    private function resetByPropertyName(string $propertyName): Select|Update|Insert|Delete
     {
         $this->{$propertyName} = [];
         return $this;
@@ -63,6 +66,7 @@ abstract class Query implements InterfacesQuery, InterfacesSelect
 
     protected function addBindsAndgetPropertyName(string $propertyName, array $bindValues): string
     {
+        $parts = [];
         $incrementBind = 0;
         $increment = count($this->bindValues);
         $partsFromString = preg_split('/(%\?|%s|%i|%b|%f|%a)/', $propertyName, -1, PREG_SPLIT_DELIM_CAPTURE);
@@ -111,7 +115,7 @@ abstract class Query implements InterfacesQuery, InterfacesSelect
         }
     }
 
-    public function table(string $table): Select|Update|Delete|Insert
+    public function table(string $table): Select|Insert|Update|Delete
     {
         $this->table = $table;
         return $this;
@@ -174,7 +178,7 @@ abstract class Query implements InterfacesQuery, InterfacesSelect
         return $this->addByPropertyName('columns', $limit);
     }
 
-    public function condition(string $condition, array $bindValues = []): Select|Update|Insert
+    public function condition(string $condition, array $bindValues = []): Select|Update|Delete
     {
         return $this->addByPropertyName('conditions', $condition, $bindValues);
     }
@@ -210,7 +214,7 @@ abstract class Query implements InterfacesQuery, InterfacesSelect
         return $this;
     }
 
-    public function limits(array $limits): Select|Update|Insert
+    public function limits(array $limits): Select|Update|Delete
     {
         foreach ($limits as $limit) {
             $this->limit($limit);

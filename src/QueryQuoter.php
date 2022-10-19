@@ -50,7 +50,7 @@ class QueryQuoter implements InterfacesQueryQuoter
     }
 
     /**
-     * @param string $nameSuffix 
+     * @param string $nameSuffix
      * @return QueryQuoter
      */
     public function setNameSuffix(string $nameSuffix): self
@@ -68,7 +68,7 @@ class QueryQuoter implements InterfacesQueryQuoter
     }
 
     /**
-     * @param string $namePrefix 
+     * @param string $namePrefix
      * @return QueryQuoter
      */
     public function setNamePrefix(string $namePrefix): self

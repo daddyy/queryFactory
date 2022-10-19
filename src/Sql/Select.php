@@ -16,7 +16,7 @@ class Select extends CommonSelect implements InterfacesSelect
             $this->buildCols(),
             $this->buildFrom(),
             $this->buildJoins(),
-            $this->buildConditions($this->conditions),
+            $this->buildConditions(),
             $this->buildGroupBy(),
             $this->buildOrderBy(),
             $this->buildLimit(),
@@ -76,6 +76,7 @@ class Select extends CommonSelect implements InterfacesSelect
 
     public function buildConditions(): string
     {
+        $conditions = [];
         foreach ($this->conditions as $condtion) {
             $conditions[] = '(' . $condtion . ')';
         }

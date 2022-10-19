@@ -1,0 +1,19 @@
+#!/bin/sh
+
+phpfiles="src"
+
+test=$(./vendor/bin/phpcs --report=source --colors --report-width=80 --standard=PSR2 $phpfiles)
+if [ "$test" = "" ]; then
+    echo '=== \033[0;32mPASSED\033[0m ==='
+else
+    echo "$test"
+    exit 1
+fi
+
+test=$(./vendor/bin/phpstan -q analyze $phpfiles --level 5)
+if [ "$test" = "" ]; then
+    echo '=== \033[0;32mPASSED\033[0m ==='
+else
+    echo "$test"
+    exit 1
+fi

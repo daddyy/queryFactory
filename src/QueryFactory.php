@@ -37,7 +37,7 @@ class QueryFactory
         return $this->getQueryObjectByDriver('delete');
     }
 
-    private function getQueryObjectByDriver(string $queryType): Query
+    private function getQueryObjectByDriver(string $queryType): Select|Insert|Delete|Update
     {
         $driver = $this->getDriver();
         return new (__NAMESPACE__ . '\\' .  ucfirst($driver) . '\\' . ucfirst($queryType))($this->queryQuoter);
