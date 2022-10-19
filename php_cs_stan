@@ -10,6 +10,8 @@ else
     exit 1
 fi
 
+phpfiles="src examples"
+
 test=$(./vendor/bin/phpstan -q analyze $phpfiles --level 5)
 if [ "$test" = "" ]; then
     echo '=== \033[0;32mPASSED\033[0m ==='

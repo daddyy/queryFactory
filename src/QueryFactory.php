@@ -28,7 +28,7 @@ class QueryFactory
     }
     public function insert(): Insert
     {
-        return $this->getQueryObjectByDriver('update');
+        return $this->getQueryObjectByDriver('insert');
     }
 
     public function delete(): Delete

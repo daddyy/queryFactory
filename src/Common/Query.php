@@ -8,11 +8,12 @@ use Exception;
 use QueryFactory\Common\Interfaces\Query as InterfacesQuery;
 use QueryFactory\Common\Interfaces\Delete;
 use QueryFactory\Common\Interfaces\Insert;
+use QueryFactory\Common\Interfaces\Parts\Condition;
 use QueryFactory\Common\Interfaces\Select;
 use QueryFactory\Common\Interfaces\Update;
 use QueryFactory\QueryQuoter;
 
-abstract class Query implements InterfacesQuery, Select, Delete, Update, Insert
+abstract class Query implements InterfacesQuery
 {
     protected string $statement;
     protected string $table = '';
@@ -28,6 +29,11 @@ abstract class Query implements InterfacesQuery, Select, Delete, Update, Insert
     {
     }
 
+    public function __toString()
+    {
+        return $this->getStatement();
+    }
+
     public function getQueryQuoter(): ?QueryQuoter
     {
         return  $this->queryQuoter;
@@ -41,9 +47,12 @@ abstract class Query implements InterfacesQuery, Select, Delete, Update, Insert
 
     private function addByPropertyName(string $propertyName, string $propertyValue, array $bindValues = []): self
     {
-        $propertyValue = $this->addBindValues($propertyValue, $bindValues);
-        $propertyValue = $this->queryQuoter->quote($propertyValue);
-        $this->{$propertyName}[] = $propertyValue;
+        $this->{$propertyName}[] = $this->queryQuoter->quote(
+            $this->addBindValues(
+                $propertyValue,
+                $bindValues
+            )
+        );
         return $this;
     }
 
@@ -163,7 +172,7 @@ abstract class Query implements InterfacesQuery, Select, Delete, Update, Insert
         return $this->resetByPropertyName('orderBy');
     }
 
-    public function resetJoins(): Select|Update|Delete
+    public function resetJoins(): Select|Update|Insert
     {
         return $this->resetByPropertyName('joins');
     }
@@ -175,7 +184,7 @@ abstract class Query implements InterfacesQuery, Select, Delete, Update, Insert
 
     public function limit(string $limit): Select|Update|Delete
     {
-        return $this->addByPropertyName('columns', $limit);
+        return $this->addByPropertyName('limits', $limit);
     }
 
     public function condition(string $condition, array $bindValues = []): Select|Update|Delete
@@ -195,7 +204,7 @@ abstract class Query implements InterfacesQuery, Select, Delete, Update, Insert
         return $this;
     }
 
-    public function join(string $table, array $conditions, string $typeJoin = 'inner'): Select|Update
+    public function join(string $table, array $conditions, string $typeJoin = 'inner'): Select|Update|Insert
     {
         $this->joins[] = [
             'type' => $typeJoin,
@@ -222,7 +231,7 @@ abstract class Query implements InterfacesQuery, Select, Delete, Update, Insert
         return $this;
     }
 
-    public function conditions(array $conditions): Select|Delete
+    public function conditions(array $conditions): Select|Delete|Update
     {
         foreach ($conditions as $conditionValue) {
             $value = $this->getValueAndBindValues($conditionValue);
@@ -231,7 +240,7 @@ abstract class Query implements InterfacesQuery, Select, Delete, Update, Insert
         return $this;
     }
 
-    public function joins(array $joins): Select|Update|Delete
+    public function joins(array $joins): Select|Update|Insert
     {
         foreach ($joins as $table => $conditions) {
             $this->join($table, $conditions);
