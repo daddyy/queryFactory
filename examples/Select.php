@@ -48,4 +48,4 @@ dump([$select->getStatement(), $select->getBindValues()]);
 $sth = $connection->prepare($select->getStatement());
 $sth->execute($select->getBindValues());
 $rows = $sth->fetchAll(PDO::FETCH_ASSOC);
-dump([$select, $rows]);
+dumpe([$select, $rows]);
