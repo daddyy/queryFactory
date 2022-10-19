@@ -10,7 +10,7 @@ require_once(__DIR__
 use QueryFactory\QueryFactory;
 use QueryFactory\QueryQuoter;
 
-$dsn = "mysql://daddyy:asdf@localhost/test";
+$dsn = "mysql://test:test@localhost/test";
 $dsn = (parse_url($dsn));
 try {
     $connectionString = $dsn['scheme'] . ':host=' . $dsn['host'] . ';dbname=' . ltrim($dsn['path'], '/');
@@ -33,7 +33,11 @@ Tracy\Debugger::$showLocation = true;
 $qf = new QueryFactory($dsn['scheme']);
 $select = $qf->select();
 $select->table('route')
-    ->conditions([['!%? = route_id OR route_id = %i', ["1", "2"]], ['route_id = %? OR route_id = %i', ["1", "2"]], ['route_id = %i', ['1']]])
+    ->conditions([
+        ['%? = route_id OR route_id = %i', ["1", "2"]],
+        ['route_id = %? OR route_id = %i', ["1", "2"]],
+        ['route_id = %i', ['1']]
+    ])
     ->cols(['*', ['concat(%i, %s) as ahoj', ['10', 'ahoj']]])
     ->condition('route_id = %? OR route_id = %i', ["1", "2"])
     ->join('brand', [['brand.brand_id = route.object_id'], ['route.object_id = %i', [1]]])

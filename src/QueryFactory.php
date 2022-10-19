@@ -4,7 +4,6 @@ namespace QueryFactory;
 
 use QueryFactory\Common\Interfaces\Delete;
 use QueryFactory\Common\Interfaces\Insert;
-use QueryFactory\Common\Interfaces\Query;
 use QueryFactory\Common\Interfaces\Select;
 use QueryFactory\Common\Interfaces\Update;
 
