@@ -1,0 +1,11 @@
+<?php
+
+namespace QueryFactory\Common\Interfaces;
+
+use QueryFactory\Common\Interfaces\Query;
+use QueryFactory\Common\Interfaces\Parts\Column;
+use QueryFactory\Common\Interfaces\Parts\Condition;
+
+interface Insert extends Query, Column, Condition
+{
+}

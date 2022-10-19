@@ -1,0 +1,13 @@
+{
+    "require-dev": {
+        "phpstan/phpstan": "^1.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "QueryFactory\\": "src/"
+        }
+    },
+    "require": {
+        "tracy/tracy": "^2.9"
+    }
+}
